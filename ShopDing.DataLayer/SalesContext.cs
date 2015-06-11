@@ -15,6 +15,11 @@ namespace ShopDing.DataLayer
             
         }
 
-        public DbSet<SalesOrder> SalesOrders { get; set; } 
+        public DbSet<SalesOrder> SalesOrders { get; set; }
+
+        protected override void OnModelCreating(DbModelBuilder modelBuilder)
+        {
+            modelBuilder.Configurations.Add(new SalesOrderConfiguration());
+        }
     }
 }
