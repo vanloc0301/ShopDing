@@ -50,7 +50,8 @@ namespace ShopDing.Web.Controllers
 
         public ActionResult Create()
         {
-            return View();
+            SalesOrderViewModel salesOrderViewModel = new SalesOrderViewModel();
+            return View(salesOrderViewModel);
         }
 
 
@@ -90,6 +91,21 @@ namespace ShopDing.Web.Controllers
                 _salesContext.Dispose();
             }
             base.Dispose(disposing);
+        }
+
+        public JsonResult Save(SalesOrderViewModel salesOrderViewModel)
+        {
+            SalesOrder salesOrder = new SalesOrder();
+            salesOrder.CustomerName = salesOrderViewModel.CustomerName;
+            salesOrder.PONumber = salesOrderViewModel.PONumber;
+
+            _salesContext.SalesOrders.Add(salesOrder);
+            _salesContext.SaveChanges();
+
+            salesOrderViewModel.MessageToClient = string.Format("{0}'s sales order has been added to database.",
+                salesOrder.CustomerName);
+
+            return Json(new {salesOrderViewModel});
         }
     }
 }
